@@ -1,9 +1,9 @@
-def get_smart_frame_list(input_frame_range: str, chunk_size: int) -> str:
-    """This function receives a frame range and a chunk size. It then
+def get_smart_frame_list(input_frame_range: str, task_size: int) -> str:
+    """This function receives a frame range and a task size. It then
     calculations a 'smart' frame list for deadline. This list is formatted
     as follows: First the first frame, then the last frame, then the frame
     between those frames, then the frame between those frames, etc, etc until
-    it fills in the rest. It also takes into account chunk size,
+    it fills in the rest. It also takes into account task size,
     which is useful when one job consists of rendering multiple frames.
     This 'smart' list is handy because this way we can spot render
     problems throughout the frame range quickly.
@@ -20,8 +20,8 @@ def get_smart_frame_list(input_frame_range: str, chunk_size: int) -> str:
     last_frame = int(input_frame_range.split("-")[1])
 
     total_frames = last_frame - first_frame + 1
-    full_chunks = total_frames // chunk_size
-    leftover_frames = total_frames - full_chunks * chunk_size
+    full_tasks = total_frames // task_size
+    leftover_frames = total_frames - full_tasks * task_size
 
     if total_frames == 2:
         # Two frames can't be rearranged
@@ -29,31 +29,31 @@ def get_smart_frame_list(input_frame_range: str, chunk_size: int) -> str:
 
     frame_list = []
 
-    if chunk_size > 1:
-        for chunk in range(full_chunks):
-            first_frame_in_chunk = chunk * chunk_size + first_frame
-            last_frame_in_chunk = chunk * chunk_size + chunk_size + first_frame - 1
-            frame_list.append(f"{first_frame_in_chunk}-{last_frame_in_chunk}")
+    if task_size > 1:
+        for task in range(full_tasks):
+            first_frame_in_task = task * task_size + first_frame
+            last_frame_in_task = task * task_size + task_size + first_frame - 1
+            frame_list.append(f"{first_frame_in_task}-{last_frame_in_task}")
     else:
-        for chunk in range(full_chunks):
-            frame_list.append(f"{chunk+first_frame}")
+        for task in range(full_tasks):
+            frame_list.append(f"{task+first_frame}")
 
     if leftover_frames >= 1:
-        first_leftover_frame_in_chunk = full_chunks * chunk_size + first_frame
-        frame_list.append(f"{first_leftover_frame_in_chunk}-{last_frame}")
+        first_leftover_frame_in_task = full_tasks * task_size + first_frame
+        frame_list.append(f"{first_leftover_frame_in_task}-{last_frame}")
 
     frame_list_length = len(frame_list)
     smart_frame_index_list = [0, (frame_list_length - 1)]
 
     # First two items are already added
-    chunks_to_build = len(frame_list) - 2
+    tasks_to_build = len(frame_list) - 2
 
     two_indexes_with_largest_difference = [
         smart_frame_index_list[0],
         smart_frame_index_list[1],
     ]
 
-    for chunk in range(chunks_to_build):
+    for task in range(tasks_to_build):
         # This is the most important part, took me a while to figure out.
         # It loops over our list, calculating the next addition every loop.
         # It calculates it like this: Example input: 1001-1005.
