@@ -3,7 +3,7 @@ FROM        --platform=$TARGETOS/$TARGETARCH python:3.11-slim
 LABEL       author="Mervin van Brakel" maintainer="mervin@breaktools.info"
 
 RUN         apt update \
-            && apt -y install git gcc g++ ca-certificates dnsutils curl iproute2 ffmpeg procps openexr \
+            && apt -y install git gcc g++ ca-certificates dnsutils curl iproute2 ffmpeg procps libopenexr-dev openexr \
             && useradd -m -d /home/container container
 
 USER        container
