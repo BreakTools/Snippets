@@ -10,3 +10,7 @@ Example output: `'1001,1005,1003,1002,1004'`
 ---
 ### Web App Backend Ptero Docker
 Contains the docker file that I used for installing my Deadline web app on my school's Pterodactyl panel.
+
+---
+### maya_vaccine_virus_remover
+A simple script that removes that weird Maya vaccine 'virus' from Maya ASCII files.
